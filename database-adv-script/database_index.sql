@@ -1,53 +1,24 @@
--- database_index.sql
+-- Index on user_id in bookings (for JOIN and WHERE)
+CREATE INDEX idx_bookings_user_id ON bookings(user_id);
 
--- Instructions:
--- 1. Save this content as database_index.sql.
--- 2. Connect to your SQL database.
--- 3. Execute the commands in this file to create indexes.
--- 4. Use EXPLAIN (for most databases) or ANALYZE (for PostgreSQL) in your SQL client
---    to measure query performance BEFORE and AFTER adding these indexes.
--- 5. Compare the output to observe the impact of the indexes.
+-- Index on property_id in bookings (for JOIN with properties)
+CREATE INDEX idx_bookings_property_id ON bookings(property_id);
 
--- Index for User table on user_id (usually primary key, but good to explicitly ensure)
-CREATE INDEX idx_user_id ON User (user_id);
+-- Index on created_at in bookings (for filtering/sorting by date)
+CREATE INDEX idx_bookings_created_at ON bookings(created_at);
 
--- Index for User table on email (for efficient lookups)
-CREATE INDEX idx_user_email ON User (email);
+-- Index on city in properties (for filtering properties by location)
+CREATE INDEX idx_properties_city ON properties(city);
 
--- Index for Booking table on booking_id (usually primary key)
-CREATE INDEX idx_booking_id ON Booking (booking_id);
+-- Example Query: Find all bookings for a specific user
+EXPLAIN ANALYZE
+SELECT * FROM bookings
+WHERE user_id = 5;
 
--- Index for Booking table on user_id (for filtering bookings by user)
-CREATE INDEX idx_booking_user_id ON Booking (user_id);
-
--- Index for Booking table on property_id (for filtering bookings by property)
-CREATE INDEX idx_booking_property_id ON Booking (property_id);
-
--- Index for Booking table on booking_date (for date-based queries)
-CREATE INDEX idx_booking_date ON Booking (booking_date);
-
--- Consider a composite index on (user_id, booking_date) if you often query bookings by user within a date range
--- CREATE INDEX idx_booking_user_date ON Booking (user_id, booking_date);
-
--- Index for Property table on property_id (usually primary key)
-CREATE INDEX idx_property_id ON Property (property_id);
-
--- Example queries to analyze BEFORE and AFTER creating indexes:
-
--- EXPLAIN SELECT * FROM User WHERE email = 'test@example.com';
--- ANALYZE SELECT * FROM User WHERE email = 'test@example.com';
-
- --EXPLAIN SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2025-01-01' AND '2025-12-31';
- --ANALYZE SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2025-01-01' AND '2025-12-31';
-
- --EXPLAIN SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
--- ANALYZE SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
-
-EXPLAIN SELECT * FROM User WHERE email = 'test@example.com';
-EXPLAIN SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2025-01-01' AND '2025-12-31';
-EXPLAIN SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
-
--- For PostgreSQL:
--- ANALYZE SELECT * FROM User WHERE email = 'test@example.com';
--- ANALYZE SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2025-01-01' AND '2025-12-31';
--- ANALYZE SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
+-- Another Example: Join properties and bookings
+EXPLAIN ANALYZE
+SELECT p.title, b.created_at
+FROM properties p
+JOIN bookings b ON p.id = b.property_id
+WHERE p.city = 'Accra'
+ORDER BY b.created_at DESC;
