@@ -26,22 +26,23 @@ JOIN
 
 
 -- Optimized version of the original query
--- Refactored query (example - fewer columns)
+-- Optimized Query with WHERE and AND
 SELECT
-    b.booking_id,
-    b.booking_date,
-    u.username,
-    p.property_name,
-    pm.amount,
-    pm.payment_status
-FROM
-    Booking b
-JOIN
-    User u ON b.user_id = u.user_id
-JOIN
-    Property p ON b.property_id = p.property_id
-JOIN
-    Payment pm ON b.booking_id = pm.booking_id;
+    b.id AS booking_id,
+    b.created_at,
+    u.name AS user_name,
+    p.title AS property_title,
+    pay.amount AS payment_amount,
+    pay.status
+FROM bookings b
+JOIN users u ON b.user_id = u.id
+JOIN properties p ON b.property_id = p.id
+JOIN payments pay ON pay.booking_id = b.id
+WHERE pay.status = 'completed'
+  AND b.created_at >= '2023-01-01';
+
+
+
 
 EXPLAIN ANALYZE
 SELECT
