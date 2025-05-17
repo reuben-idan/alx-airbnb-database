@@ -10,9 +10,10 @@ INNER JOIN users ON bookings.user_id = users.id;
 
 SELECT 
     properties.id AS property_id,
-    properties.title,
+    properties.title AS property_title,
     reviews.id AS review_id,
-    reviews.rating
+    reviews.rating,
+    reviews.comment
 FROM properties
 LEFT JOIN reviews ON properties.id = reviews.property_id;
 
