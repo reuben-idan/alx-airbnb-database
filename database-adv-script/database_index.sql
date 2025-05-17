@@ -34,11 +34,20 @@ CREATE INDEX idx_property_id ON Property (property_id);
 
 -- Example queries to analyze BEFORE and AFTER creating indexes:
 
- EXPLAIN SELECT * FROM User WHERE email = 'test@example.com';
- ANALYZE SELECT * FROM User WHERE email = 'test@example.com';
+-- EXPLAIN SELECT * FROM User WHERE email = 'test@example.com';
+-- ANALYZE SELECT * FROM User WHERE email = 'test@example.com';
 
- EXPLAIN SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2025-01-01' AND '2025-12-31';
- ANALYZE SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2025-01-01' AND '2025-12-31';
+ --EXPLAIN SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2025-01-01' AND '2025-12-31';
+ --ANALYZE SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2025-01-01' AND '2025-12-31';
 
- EXPLAIN SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
- ANALYZE SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
+ --EXPLAIN SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
+-- ANALYZE SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
+
+EXPLAIN SELECT * FROM User WHERE email = 'test@example.com';
+EXPLAIN SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2025-01-01' AND '2025-12-31';
+EXPLAIN SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
+
+-- For PostgreSQL:
+-- ANALYZE SELECT * FROM User WHERE email = 'test@example.com';
+-- ANALYZE SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2025-01-01' AND '2025-12-31';
+-- ANALYZE SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
