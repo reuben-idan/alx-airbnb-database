@@ -1,5 +1,13 @@
 -- database_index.sql
 
+-- Instructions:
+-- 1. Save this content as database_index.sql.
+-- 2. Connect to your SQL database.
+-- 3. Execute the commands in this file to create indexes.
+-- 4. Use EXPLAIN (for most databases) or ANALYZE (for PostgreSQL) in your SQL client
+--    to measure query performance BEFORE and AFTER adding these indexes.
+-- 5. Compare the output to observe the impact of the indexes.
+
 -- Index for User table on user_id (usually primary key, but good to explicitly ensure)
 CREATE INDEX idx_user_id ON User (user_id);
 
@@ -24,31 +32,13 @@ CREATE INDEX idx_booking_date ON Booking (booking_date);
 -- Index for Property table on property_id (usually primary key)
 CREATE INDEX idx_property_id ON Property (property_id);
 
--- To measure performance BEFORE adding indexes (example queries):
--- EXPLAIN SELECT * FROM User WHERE email = 'test@example.com';
--- EXPLAIN SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2024-01-01' AND '2024-12-31';
--- EXPLAIN SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
+-- Example queries to analyze BEFORE and AFTER creating indexes:
 
--- Execute the CREATE INDEX statements in this file against your database.
+ EXPLAIN SELECT * FROM User WHERE email = 'test@example.com';
+ ANALYZE SELECT * FROM User WHERE email = 'test@example.com';
 
--- To measure performance AFTER adding indexes (run the same example queries with EXPLAIN):
--- EXPLAIN SELECT * FROM User WHERE email = 'test@example.com';
--- EXPLAIN SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2024-01-01' AND '2024-12-31';
--- EXPLAIN SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
+ EXPLAIN SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2025-01-01' AND '2025-12-31';
+ ANALYZE SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2025-01-01' AND '2025-12-31';
 
--- Compare the output of the EXPLAIN statements before and after adding the indexes.
--- Look for improvements in the 'key' column (showing index usage), 'type' (avoiding 'ALL' if possible), and the number of 'rows' examined.
-
--- In PostgreSQL, you can use ANALYZE instead of EXPLAIN for more detailed performance information:
--- ANALYZE SELECT * FROM User WHERE email = 'test@example.com';
--- ANALYZE SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2024-01-01' AND '2024-12-31';
--- ANALYZE SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
-
-EXPLAIN SELECT * FROM User WHERE email = 'test@example.com';
-EXPLAIN SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2024-01-01' AND '2024-12-31';
-EXPLAIN SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
-
--- In PostgreSQL:
--- ANALYZE SELECT * FROM User WHERE email = 'test@example.com';
--- ANALYZE SELECT * FROM Booking WHERE user_id = 123 AND booking_date BETWEEN '2024-01-01' AND '2024-12-31';
--- ANALYZE SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
+ EXPLAIN SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
+ ANALYZE SELECT * FROM Booking b JOIN Property p ON b.property_id = p.property_id WHERE p.property_id = 456;
